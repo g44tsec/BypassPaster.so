@@ -1,0 +1,24 @@
+(function() {
+    var originalDate = Date;
+    var offset = 15 * 60 * 1000; // 15 minutes in milliseconds
+
+    function spoofedDate() {
+        if (arguments.length === 0) {
+            return new originalDate(Date.now() + offset);
+        } else {
+            return new originalDate(...arguments);
+        }
+    }
+
+    // Override Date methods
+    spoofedDate.now = function() {
+        return originalDate.now() + offset;
+    };
+
+    spoofedDate.prototype = originalDate.prototype;
+
+    // Apply the spoofed Date to the global scope
+    window.Date = spoofedDate;
+    
+    console.log('Time spoofed to 15 minutes in the future.');
+})();
